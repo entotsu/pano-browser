@@ -4,38 +4,52 @@
 	<title>three.js webgl - equirectangular panorama demo</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<style>
-			body {
-				background-color: #000000;
-				margin: 0px;
-				overflow: hidden;
-			}
-
-			#info {
-				position: absolute;
-				top: 0px; width: 100%;
-				color: #ffffff;
-				padding: 5px;
-				font-family:Monospace;
-				font-size:13px;
-				font-weight: bold;
-				text-align:center;
-			}
-
-			a {
-				color: #ffffff;
-			}
-		</style>
+	<link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+
+
+
+
+<script>
+    // ================================================
+    //                 C O N F I G
+    // ================================================
+	window.CONFIG = {};
+
+	CONFIG.enableWrappingDeg = true;
+
+	CONFIG.webSocket_URI = "ws://localhost:8887";
+
+	CONFIG.first_panoramicPhoto_URL = "./images/textures/ricoh-theta-sample.jpg";
+</script>
+
+
+
+
+
+<body>
 	<div id="container"></div>
 	<div id="info">
 		equirectangular形式のファイルをドラッグ＆ドロップしてください。
 	</div>
 
-	<script src="./javascripts/three.min.js"></script>
-	<script src="./javascripts/render.js"></script>
 
+
+    <div class="popupMessage" id="webSocketErrorMessage">
+        <p class="imgP"><img src="images/icons/error.png"><span>WebSocket Server is not found.</span></p>
+    </div>
+    <div class="popupMessage" id="webSocketConnectedMessage">
+        <p class="imgP"><img src="images/icons/connecting.png"><span>Connected to WebSocket Server.</span></p>
+    </div>
+
+
+
+	<script src="./javascripts/lib/jquery-2.1.3.min.js"></script>
+	<script src="./javascripts/lib/three.min.js"></script>
+	<script src="./javascripts/util.js"></script>
+	<script src="./javascripts/websocket.js"></script>
+	<script src="./javascripts/render.js"></script>
+	<script src="./javascripts/main.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-(function() {
+function initPanoRender(onRotateCamera) {
 
 	var camera, scene, renderer, material;
 
@@ -17,6 +17,44 @@
 	init();
 	animate();
 
+
+	//---------------- added -------------------
+
+	var API = {};
+
+	// the only Global function in this scope
+	API.rotateCamera = function(_lon, _lat) {
+		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);
+
+		lon = _lon;
+		lat = _lat;
+	}
+
+	//マウスをつかって回転させたときに呼ばれる
+	function onCameraRotated_withMouse(lon, lat) {
+
+		var fixed_lon = lon;
+		var fixed_lat = lat;
+
+		if (CONFIG.enableWrappingDeg) {
+			fixed_lon %= 360;
+			if (fixed_lon <= 0) fixed_lon *= -1;
+		}
+
+		if (fixed_lat >  90) fixed_lat =  90;
+		if (fixed_lat < -90) fixed_lat = -90;
+
+
+		fixed_lon = util.round_to4decimalPlaces(fixed_lon);
+		fixed_lat = util.round_to4decimalPlaces(fixed_lat);
+
+		// console.log("*onCameraRotated_withMouse lon:" + fixed_lon + "°  lat:" + fixed_lat + "°" );
+		onRotateCamera(fixed_lon, fixed_lat);
+	}
+
+
+	//------------------------------------------
+
 	function init() {
 
 		var container, mesh;
@@ -32,7 +70,7 @@
 		geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
 		material = new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture('./images/textures/ricoh-theta-sample.jpg')
+			map: THREE.ImageUtils.loadTexture(CONFIG.first_panoramicPhoto_URL)
 		});
 
 		mesh = new THREE.Mesh(geometry, material);
@@ -55,6 +93,11 @@
 
 	}
 
+
+
+
+
+
 	function onWindowResize() {
 
 		camera.aspect = window.innerWidth / window.innerHeight;
@@ -63,6 +106,11 @@
 		renderer.setSize(window.innerWidth, window.innerHeight);
 
 	}
+
+
+
+
+
 
 	function onDocumentMouseDown(event) {
 
@@ -85,6 +133,8 @@
 			lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
 			lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
 
+			// added
+			onCameraRotated_withMouse(lon, lat);
 		}
 	}
 
@@ -121,6 +171,10 @@
 
 	}
 
+
+
+
+
 	function animate() {
 
 		requestAnimationFrame(animate);
@@ -148,8 +202,13 @@
 				*/
 
 		renderer.render(scene, camera);
-
 	}
+
+
+
+
+
+
 
 	/**
 	 *画像Drag＆Drop処理
@@ -186,4 +245,6 @@
 	droppable.addEventListener('dragover', cancelEvent);
 	droppable.addEventListener('drop', handllerDroppedFile);
 	
-})();
+
+	return API;
+}

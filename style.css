@@ -1,0 +1,63 @@
+body {
+	background-color: #000000;
+	margin: 0px;
+	overflow: hidden;
+}
+
+#info {
+	position: absolute;
+	top: 0px; width: 100%;
+	color: #ffffff;
+	padding: 5px;
+	font-family:Monospace;
+	font-size:13px;
+	font-weight: bold;
+	text-align:center;
+}
+
+a {
+	color: #ffffff;
+}
+
+
+
+
+/* ---------- popup ---------- */
+
+.popupMessage {
+	position: fixed;
+	top:40px;
+	left:40px;
+
+	border-radius: 20px;
+	background-color: rgba(0,0,0,0.5);
+
+	padding: 10px;
+
+	color:  rgba(255,255,255,0.8);
+}
+
+#webSocketConnectedMessage {
+	background-color: rgba(0, 97, 19, 0.5);
+}
+#webSocketErrorMessage {
+	background-color: rgba(97, 0, 13, 0.5);
+}
+#webSocketErrorMessage,#webSocketConnectedMessage{
+	display: none;
+}
+
+
+.popupMessage p {
+	margin: 10px;
+	display: inline-block;
+}
+.popupMessage img {
+	opacity: 0.8;
+	height:45px;
+	vertical-align: middle;
+	padding: 0px 11px 8px 8px;
+}
+.popupMessage p span{
+	font-size: 20px;
+}

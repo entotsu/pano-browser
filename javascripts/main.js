@@ -11,8 +11,8 @@
 	}
 
 	function initPanoBrowser() {
-		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );
-		panoAPI = initPanoRender( onRotateCamera )
+		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
+		panoAPI = initPanoRender( onRotateCamera )//render.js
 	}
 
 

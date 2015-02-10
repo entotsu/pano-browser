@@ -33,7 +33,7 @@
 		        pitch = orientation.pitch;
 		        yaw = orientation.yaw;
 
-		        panoAPI.rotateCamera(pitch, yaw);
+		        panoAPI.rotateCamera(yaw, pitch);
 		    }
 
 		    //Volume (Extra case)

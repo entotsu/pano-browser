@@ -49,7 +49,8 @@ function initPanoRender(onRotateCamera) {
 		fixed_lat = util.round_to4decimalPlaces(fixed_lat);
 
 		// console.log("*onCameraRotated_withMouse lon:" + fixed_lon + "°  lat:" + fixed_lat + "°" );
-		onRotateCamera(fixed_lon, fixed_lat);
+		// onRotateCamera(fixed_lon, fixed_lat);
+		onRotateCamera(fixed_lat, fixed_lon);
 	}
 
 

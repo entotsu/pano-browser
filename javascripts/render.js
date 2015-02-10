@@ -85,6 +85,11 @@ function initPanoRender(onRotateCamera) {
 		document.addEventListener('mousedown', onDocumentMouseDown, false);
 		document.addEventListener('mousemove', onDocumentMouseMove, false);
 		document.addEventListener('mouseup', onDocumentMouseUp, false);
+
+		document.addEventListener('touchstart', onDocumentMouseDown, false);
+		document.addEventListener('touchmove', onDocumentMouseMove, false);
+		document.addEventListener('touchend', onDocumentMouseUp, false);
+
 		document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 		document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
 

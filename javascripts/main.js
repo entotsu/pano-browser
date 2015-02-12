@@ -43,7 +43,7 @@
 		    else if (firstWord == "Volume") {
 		        pitch = getPitchFromVolumeMessage(message);
 
-		        panoAPI.rotateCamera(pitch, yaw);
+		        panoAPI.rotateCamera(yaw, pitch);
 		    }
 		}
 	}

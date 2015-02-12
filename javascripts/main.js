@@ -21,8 +21,8 @@
 
 	//=========================== ↓ MAIN FUNCTION ↓ ================================
 
-	var pitch;
-	var yaw;
+	var pitch = 0;
+	var yaw = 0;
 	var lastMessage;
 
 	// When Browser recieved message from WebSocketServer of CVE-Client

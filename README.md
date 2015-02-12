@@ -17,7 +17,7 @@ Richo theta（シータ）で撮影した360°（quirectangular形式）の画�
 
 ### demo
 
-http://entotsu.github.io/richo-theta-with-threejs
+http://entotsu.github.io/pano-browser/
 
 Richo theta（シータ）で撮影した360°（quirectangular形式）の画像ファイルをドラッグ＆ドロップしてください。
 

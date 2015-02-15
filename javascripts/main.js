@@ -21,20 +21,21 @@
 	function initPanoBrowser() {
 		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
 		panoAPI = initPanoRender( onRotateCamera )//render.js
+		enableDragAndDropImage(onDropImageFile);//dropImage.js
 	}
 
 
 
 
 
-
-	//=========================== ↓ MAIN FUNCTION ↓ ================================
+	//============== ↓ MAIN FUNCTIONS (EVENTS) ↓ ================
 
 	var pitch = 0;
 	var yaw = 0;
 	var lastMessage;
 
 	// When Browser recieved message from WebSocketServer of CVE-Client
+	// this function called from websocket.js
 	function onRecieveMessageViaWebSocket(message) {
 
 		if (message != lastMessage) {
@@ -76,7 +77,13 @@
 
 	    lastMessage = message;
 	}
-	//=========================== ↑ MAIN FUNCTION ↑ ================================
+
+
+	// this function called from dropImage.js
+	function onDropImageFile (file) {
+		panoAPI.changePanoramicPhoto(file);
+	}
+	//================= ↑ MAIN FUNCTIONS ↑ ==================
 
 
 

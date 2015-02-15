@@ -22,6 +22,20 @@ function initPanoRender(onRotateCamera) {
 
 	var API = {};
 
+
+	API.changePanoramicPhoto = function(file) {
+		var img = document.createElement("img");
+		var fileReader = new FileReader();
+		fileReader.onload = function(e) {
+			img.src = e.target.result;
+			material.map = new THREE.Texture(img);
+			material.map.needsUpdate = true;
+		};
+
+		fileReader.readAsDataURL(file);
+	};
+
+
 	// the only Global function in this scope
 	API.rotateCamera = function(_lon, _lat) {
 		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);
@@ -211,46 +225,6 @@ function initPanoRender(onRotateCamera) {
 	}
 
 
-
-
-
-
-
-	/**
-	 *画像Drag＆Drop処理
-	 */
-
-	function cancelEvent(e) {
-		e.preventDefault();
-		e.stopPropagation();
-	}
-
-	function handllerDroppedFile(e) {
-		//単一ファイルの想定
-		var file = e.dataTransfer.files[0];
-
-		if (!file.type.match('image.*')) {
-			alert('imageファイルにしてね');
-			cancelEvent(e);
-		}
-
-		var img = document.createElement("img");
-		var fileReader = new FileReader();
-		fileReader.onload = function(e) {
-			img.src = e.target.result;
-			material.map = new THREE.Texture(img);
-			material.map.needsUpdate = true;
-		};
-		fileReader.readAsDataURL(file);
-		//デフォルトのイベントキャンセルしないとブラウザでイメージが表示されてしまう
-		cancelEvent(e);
-	}
-
-	var droppable = document.getElementById('container');
-	droppable.addEventListener('dradenter', cancelEvent);
-	droppable.addEventListener('dragover', cancelEvent);
-	droppable.addEventListener('drop', handllerDroppedFile);
-	
 
 	return API;
 }

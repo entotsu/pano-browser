@@ -1,7 +1,11 @@
 (function(){
 
 
+
 	window.util = {}
+
+
+
 
 	//小数点４桁まで丸める
 	util.round_to4decimalPlaces = function(num) {
@@ -16,30 +20,12 @@
 	};
 
 
-	// Extention of String.split
-	(function(){
-	    var orgsplit = String.prototype.split;
-	    String.prototype.split = function(arg){
-	        if(typeof arg == "object"){
-	            var ary = orgsplit.call(this,arg[0]);
-	            for(var i=1;i<arg.length;i++){
-	                for(var j=ary.length-1;j>=0;j--){
-	                    ary[j] = orgsplit.call(ary[j],arg[i]);
-	                    Array.prototype.splice.apply(ary,[j,1].concat(ary[j]));
-	                }
-	            }
-	            return ary;
-	        }else{
-	            return orgsplit.call(this,arg);
-	        }
-	    };
-	})();
 
 
 
 	//---------------------------- specify user agent ----------------------------
 
-	window.ua = {};
+	var ua = {};
 	ua.name = window.navigator.userAgent.toLowerCase();
 	 
 	ua.isIE = (ua.name.indexOf('msie') >= 0 || ua.name.indexOf('trident') >= 0);
@@ -68,6 +54,35 @@
 	        ua.ver = parseInt(ua.verArray[2], 10);
 	    }
 	}
+
+	util.ua = ua;
+
+
+
+
+
+
+	//  -------- Extending String.split() ----------
+
+	(function(){
+	    var orgsplit = String.prototype.split;
+	    String.prototype.split = function(arg){
+	        if(typeof arg == "object"){
+	            var ary = orgsplit.call(this,arg[0]);
+	            for(var i=1;i<arg.length;i++){
+	                for(var j=ary.length-1;j>=0;j--){
+	                    ary[j] = orgsplit.call(ary[j],arg[i]);
+	                    Array.prototype.splice.apply(ary,[j,1].concat(ary[j]));
+	                }
+	            }
+	            return ary;
+	        }else{
+	            return orgsplit.call(this,arg);
+	        }
+	    };
+	})();
+
+
 
 
 })();

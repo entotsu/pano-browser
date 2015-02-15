@@ -6,7 +6,7 @@
 		initPanoBrowser()
 
 		// SmartPhone Scroll Off
-		if (ua.isiOS || ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
+		if (util.ua.isiOS || util.ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
 	}
 
 
@@ -22,6 +22,8 @@
 		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
 		panoAPI = initPanoRender( onRotateCamera )//render.js
 	}
+
+
 
 
 
@@ -65,6 +67,7 @@
 
 
 	// When rotate Camera by moving mouse
+	// This function called from render.js
 	function onRotateCamera(phi, theta) {
 
 	    var message = "o=0," + phi + "," + theta;

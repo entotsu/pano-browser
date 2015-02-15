@@ -5,6 +5,12 @@
 	var websocketAPI = null;
 	var panoAPI = null;
 
+	function initPanoBrowser() {
+		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
+		panoAPI = initPanoRender( onRotateCamera )//render.js
+	}
+
+
 
 	window.onload = function() {
 		initPanoBrowser()
@@ -13,10 +19,12 @@
 		if (ua.isiOS || ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
 	}
 
-	function initPanoBrowser() {
-		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
-		panoAPI = initPanoRender( onRotateCamera )//render.js
-	}
+
+
+
+
+
+
 
 
 	//=========================== ↓ MAIN FUNCTION ↓ ================================
@@ -45,6 +53,12 @@
 
 		        panoAPI.rotateCamera(yaw, pitch);
 		    }
+		    else {
+				var beforeEqual = message.substr(0, message.indexOf( "=" ));
+				if (beforeEqual == "o") {
+					//perce
+				}
+		    }
 		}
 	}
 
@@ -61,6 +75,13 @@
 	//=========================== ↑ MAIN FUNCTION ↑ ================================
 
 
+
+
+
+
+
+
+	// ----------- message parser --------------------
 
 	function getPitchFromVolumeMessage(message) {
         var volume = message.split(":")[1];
@@ -94,6 +115,10 @@
 
 	    return orientation;
 	}
+
+
+
+
 
 
 	//---------------------------- specify user agent ----------------------------

@@ -1,7 +1,3 @@
-
-
-
-
 function initWebSocket(onRecieveFunction){
 
     if (!onRecieveFunction) alert("please set 'onRecieveFunction' to getWebSocketSendFunction");

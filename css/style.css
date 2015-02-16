@@ -21,15 +21,14 @@ body {
 
 .popupMessage {
 	position: fixed;
-	top:40px;
-	right:40px;
+	top:20px;
+	right:20px;
 
 	border-radius: 5px;
-	background-color: rgba(0,0,0,0.5);
-
 	padding: 0px;
 
 	color:  rgba(255,255,255,0.8);
+	opacity: 0.8;
 }
 .popupMessage img {
 	opacity: 0.8;
@@ -40,8 +39,8 @@ body {
 .popupMessage p {
 	margin: 10px;
 	padding-right: 8px;
-	opacity: 0.8;
 	display: inline-block;
+	opacity: 0.8;
 }
 .popupMessage p span{
 	font-size: 10px;
@@ -52,7 +51,7 @@ body {
 	background-color: rgba(0, 97, 19, 0.5);
 }
 #webSocketErrorMessage {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.2);
 }
 #webSocketErrorMessage,#webSocketConnectedMessage{
 	display: none;

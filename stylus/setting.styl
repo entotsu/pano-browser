@@ -1,0 +1,129 @@
+
+
+
+#settingButton
+	position fixed
+	z-index 10
+	top 40px
+	left 40px
+	border-radius 100%
+
+	padding 8px
+
+	border 2px solid rgba(255, 255, 255, .1)
+	background-color rgba(0, 0, 0, .1)
+	
+	transition-property opacity
+	transition-duration 0.2s
+	opacity 0.8
+	&:hover
+		opacity 0.85
+	&:active
+		opacity 0.6
+
+	img
+		width 25px
+	
+
+
+#SheetBehindModal
+	background-color rgba(0, 0, 0, .7)
+	position fixed
+	z-index 100
+	top 0px
+	left 0px
+	width 100%
+	height 100%
+	display none
+
+
+
+
+
+settingAreaWidth = 250px
+settingMargin = settingAreaWidth / 10
+settingBgColor = rgba(51, 177, 255, .9)
+settingDivBg = rgba(0, 0, 0, .075)
+fontColor = rgba(255, 255, 255, .8)
+
+#settingArea
+	position fixed
+	z-index 200
+	top 0px
+	left (settingAreaWidth + settingMargin * 2) * -1
+	transition-property left
+	transition-duration 0.3s
+	&.show
+		left 0px
+
+	background-color settingBgColor
+	color fontColor
+
+	height 100%
+	width settingAreaWidth
+
+
+	padding settingMargin
+	>h2
+		font-size 18px
+		margin 30px 5px
+		margin-top 10px
+	>div
+		padding 15px
+		margin 15px 0px
+
+		background-color settingDivBg
+
+		h3
+			color rgba(255, 255, 255, .85)
+			font-size 16px
+			margin 5px
+			
+
+	#websocket_setting
+		p
+			margin 30px
+			margin-top 20px
+			margin-bottom 20px
+			text-align: center
+
+			input
+				margin 0
+				font-size 14px
+				outline none
+				width 100%
+				color white
+				background-color rgba(0,0,0, 0)
+				border-style none
+				border-bottom 2px rgba(255,255,255, .5) solid
+			a
+				padding 10px
+				font-size 14px
+				text-decoration none
+
+				color rgba(255, 255, 255, .85)
+
+				transition-property background-color, color
+				transition-duration 0.3s
+				background-color rgba(255,255,255, .2)
+				&:hover
+					opacity 0.9
+					background-color rgba(0,0,0, 0.1)
+				&:active
+					opacity 0.7
+					background-color rgba(255,255,255, 0.9)
+					color rgba(0,0,0, 0.9)
+
+	#directionSetting
+		div
+			margin 15px
+			h4
+				margin 5px
+
+
+	#credits
+		background-color rgba(0, 0, 0, .0)
+		font-size 8px
+		line-height 1.5
+
+

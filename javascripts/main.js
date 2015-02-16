@@ -1,14 +1,4 @@
-
-
 (function(){
-
-	var websocketAPI = null;
-	var panoAPI = null;
-
-	function initPanoBrowser() {
-		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
-		panoAPI = initPanoRender( onRotateCamera )//render.js
-	}
 
 
 
@@ -16,24 +6,37 @@
 		initPanoBrowser()
 
 		// SmartPhone Scroll Off
-		if (ua.isiOS || ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
+		if (util.ua.isiOS || util.ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
 	}
 
 
 
 
 
+	// ------------------ init pano-browser ------------------
+
+	var websocketAPI = null;
+	var panoAPI = null;
+
+	function initPanoBrowser() {
+		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
+		panoAPI = initPanoRender( onRotateCamera )//render.js
+		enableDragAndDropImage(onDropImageFile);//dropImage.js
+		initSettingView(onClickConnectButton);//ui.js
+	}
 
 
 
 
-	//=========================== ↓ MAIN FUNCTION ↓ ================================
+
+	//============== ↓ MAIN FUNCTIONS (EVENTS) ↓ ================
 
 	var pitch = 0;
 	var yaw = 0;
 	var lastMessage;
 
 	// When Browser recieved message from WebSocketServer of CVE-Client
+	// this function called from websocket.js
 	function onRecieveMessageViaWebSocket(message) {
 
 		if (message != lastMessage) {
@@ -44,6 +47,10 @@
 		        pitch = orientation.pitch;
 		        yaw = orientation.yaw;
 
+		        // TODO inverting is only here. ok???
+				if (CONFIG.direction.vertical == "negative") pitch *= -1;
+				if (CONFIG.direction.horizontal == "left") yaw *= -1;
+
 		        panoAPI.rotateCamera(yaw, pitch);
 		    }
 
@@ -53,6 +60,8 @@
 
 		        panoAPI.rotateCamera(yaw, pitch);
 		    }
+
+		    //when catch message from other pano-browser
 		    else {
 				var beforeEqual = message.substr(0, message.indexOf( "=" ));
 				if (beforeEqual == "o") {
@@ -64,6 +73,7 @@
 
 
 	// When rotate Camera by moving mouse
+	// This function called from render.js
 	function onRotateCamera(phi, theta) {
 
 	    var message = "o=0," + phi + "," + theta;
@@ -72,7 +82,22 @@
 
 	    lastMessage = message;
 	}
-	//=========================== ↑ MAIN FUNCTION ↑ ================================
+
+
+	// this function called from dropImage.js
+	function onDropImageFile (file) {
+		panoAPI.changePanoramicPhoto(file);
+	}
+
+	function onClickConnectButton(newUri) {
+		CONFIG.webSocket_URI = newUri;
+		websocketAPI.connect();
+
+	}
+	//================= ↑ MAIN FUNCTIONS ↑ ==================
+
+
+
 
 
 
@@ -121,37 +146,4 @@
 
 
 
-	//---------------------------- specify user agent ----------------------------
-
-	var ua = {};
-	ua.name = window.navigator.userAgent.toLowerCase();
-	 
-	ua.isIE = (ua.name.indexOf('msie') >= 0 || ua.name.indexOf('trident') >= 0);
-	ua.isiPhone = ua.name.indexOf('iphone') >= 0;
-	ua.isiPod = ua.name.indexOf('ipod') >= 0;
-	ua.isiPad = ua.name.indexOf('ipad') >= 0;
-	ua.isiOS = (ua.isiPhone || ua.isiPod || ua.isiPad);
-	ua.isAndroid = ua.name.indexOf('android') >= 0;
-	ua.isTablet = (ua.isiPad || (ua.isAndroid && ua.name.indexOf('mobile') < 0));
-	 
-	if (ua.isIE) {
-	    ua.verArray = /(msie|rv:?)\s?([0-9]{1,})([\.0-9]{1,})/.exec(ua.name);
-	    if (ua.verArray) {
-	        ua.ver = parseInt(ua.verArray[2], 10);
-	    }
-	}
-	if (ua.isiOS) {
-	    ua.verArray = /(os)\s([0-9]{1,})([\_0-9]{1,})/.exec(ua.name);
-	    if (ua.verArray) {
-	        ua.ver = parseInt(ua.verArray[2], 10);
-	    }
-	}
-	if (ua.isAndroid) {
-	    ua.verArray = /(android)\s([0-9]{1,})([\.0-9]{1,})/.exec(ua.name);
-	    if (ua.verArray) {
-	        ua.ver = parseInt(ua.verArray[2], 10);
-	    }
-	}
-
 })();
-

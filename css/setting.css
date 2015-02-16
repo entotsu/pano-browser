@@ -1,0 +1,113 @@
+#settingButton {
+  position: fixed;
+  z-index: 10;
+  top: 40px;
+  left: 40px;
+  border-radius: 100%;
+  padding: 8px;
+  border: 2px solid rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.1);
+  transition-property: opacity;
+  transition-duration: 0.2s;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+#settingButton:hover {
+  opacity: 0.85;
+  filter: alpha(opacity=85);
+}
+#settingButton:active {
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+#settingButton img {
+  width: 25px;
+}
+#SheetBehindModal {
+  background-color: rgba(0,0,0,0.7);
+  position: fixed;
+  z-index: 100;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+#settingArea {
+  position: fixed;
+  z-index: 200;
+  top: 0px;
+  left: -300px;
+  transition-property: left;
+  transition-duration: 0.3s;
+  background-color: rgba(51,177,255,0.9);
+  color: rgba(255,255,255,0.8);
+  height: 100%;
+  width: 250px;
+  padding: 25px;
+}
+#settingArea.show {
+  left: 0px;
+}
+#settingArea >h2 {
+  font-size: 18px;
+  margin: 30px 5px;
+  margin-top: 10px;
+}
+#settingArea >div {
+  padding: 15px;
+  margin: 15px 0px;
+  background-color: rgba(0,0,0,0.075);
+}
+#settingArea >div h3 {
+  color: rgba(255,255,255,0.85);
+  font-size: 16px;
+  margin: 5px;
+}
+#settingArea #websocket_setting p {
+  margin: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+#settingArea #websocket_setting p input {
+  margin: 0;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  color: #fff;
+  background-color: rgba(0,0,0,0);
+  border-style: none;
+  border-bottom: 2px rgba(255,255,255,0.5) solid;
+}
+#settingArea #websocket_setting p a {
+  padding: 10px;
+  font-size: 14px;
+  text-decoration: none;
+  color: rgba(255,255,255,0.85);
+  transition-property: background-color, color;
+  transition-duration: 0.3s;
+  background-color: rgba(255,255,255,0.2);
+}
+#settingArea #websocket_setting p a:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+  background-color: rgba(0,0,0,0.1);
+}
+#settingArea #websocket_setting p a:active {
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  background-color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.9);
+}
+#settingArea #directionSetting div {
+  margin: 15px;
+}
+#settingArea #directionSetting div h4 {
+  margin: 5px;
+}
+#settingArea #credits {
+  background-color: rgba(0,0,0,0);
+  font-size: 8px;
+  line-height: 1.5;
+}

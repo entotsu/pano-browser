@@ -22,6 +22,20 @@ function initPanoRender(onRotateCamera) {
 
 	var API = {};
 
+
+	API.changePanoramicPhoto = function(file) {
+		var img = document.createElement("img");
+		var fileReader = new FileReader();
+		fileReader.onload = function(e) {
+			img.src = e.target.result;
+			material.map = new THREE.Texture(img);
+			material.map.needsUpdate = true;
+		};
+
+		fileReader.readAsDataURL(file);
+	};
+
+
 	// the only Global function in this scope
 	API.rotateCamera = function(_lon, _lat) {
 		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);
@@ -82,16 +96,16 @@ function initPanoRender(onRotateCamera) {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		container.appendChild(renderer.domElement);
 
-		document.addEventListener('mousedown', onDocumentMouseDown, false);
-		document.addEventListener('mousemove', onDocumentMouseMove, false);
-		document.addEventListener('mouseup', onDocumentMouseUp, false);
+		container.addEventListener('mousedown', onMouseDown, false);
+		container.addEventListener('mousemove', onMouseMove, false);
+		container.addEventListener('mouseup', onMouseUp, false);
 
-		document.addEventListener('touchstart', onDocumentMouseDown, false);
-		document.addEventListener('touchmove', onDocumentMouseMove, false);
-		document.addEventListener('touchend', onDocumentMouseUp, false);
+		container.addEventListener('touchstart', onMouseDown, false);
+		container.addEventListener('touchmove', onMouseMove, false);
+		container.addEventListener('touchend', onMouseUp, false);
 
-		document.addEventListener('mousewheel', onDocumentMouseWheel, false);
-		document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+		container.addEventListener('mousewheel', onMouseWheel, false);
+		container.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
 		//
 
@@ -118,7 +132,7 @@ function initPanoRender(onRotateCamera) {
 
 
 
-	function onDocumentMouseDown(event) {
+	function onMouseDown(event) {
 
 		event.preventDefault();
 
@@ -132,7 +146,7 @@ function initPanoRender(onRotateCamera) {
 
 	}
 
-	function onDocumentMouseMove(event) {
+	function onMouseMove(event) {
 
 		if (isUserInteracting) {
 
@@ -144,13 +158,13 @@ function initPanoRender(onRotateCamera) {
 		}
 	}
 
-	function onDocumentMouseUp(event) {
+	function onMouseUp(event) {
 
 		isUserInteracting = false;
 
 	}
 
-	function onDocumentMouseWheel(event) {
+	function onMouseWheel(event) {
 
 		// WebKit
 
@@ -211,46 +225,6 @@ function initPanoRender(onRotateCamera) {
 	}
 
 
-
-
-
-
-
-	/**
-	 *画像Drag＆Drop処理
-	 */
-
-	function cancelEvent(e) {
-		e.preventDefault();
-		e.stopPropagation();
-	}
-
-	function handllerDroppedFile(e) {
-		//単一ファイルの想定
-		var file = e.dataTransfer.files[0];
-
-		if (!file.type.match('image.*')) {
-			alert('imageファイルにしてね');
-			cancelEvent(e);
-		}
-
-		var img = document.createElement("img");
-		var fileReader = new FileReader();
-		fileReader.onload = function(e) {
-			img.src = e.target.result;
-			material.map = new THREE.Texture(img);
-			material.map.needsUpdate = true;
-		};
-		fileReader.readAsDataURL(file);
-		//デフォルトのイベントキャンセルしないとブラウザでイメージが表示されてしまう
-		cancelEvent(e);
-	}
-
-	var droppable = document.getElementById('container');
-	droppable.addEventListener('dradenter', cancelEvent);
-	droppable.addEventListener('dragover', cancelEvent);
-	droppable.addEventListener('drop', handllerDroppedFile);
-	
 
 	return API;
 }

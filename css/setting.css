@@ -1,15 +1,15 @@
 #settingButton {
   position: fixed;
   z-index: 10;
-  top: 40px;
-  left: 40px;
+  bottom: 20px;
+  left: 20px;
   border-radius: 100%;
   padding: 8px;
   background-color: rgba(0,0,0,0.05);
   transition-property: opacity;
   transition-duration: 0.2s;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+  opacity: 0.3;
+  filter: alpha(opacity=30);
 }
 #settingButton:hover {
   opacity: 0.85;

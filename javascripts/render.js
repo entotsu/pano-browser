@@ -151,8 +151,18 @@ function initPanoRender(onRotateCamera) {
 
 		if (isUserInteracting) {
 
-			lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
-			lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
+			var mouseMoveY = (event.clientY - onPointerDownPointerY);
+			var mouseMoveX = (onPointerDownPointerX - event.clientX);
+
+			if (CONFIG.direction.vertical == "negative")
+				lat = mouseMoveY * -0.1 + onPointerDownLat;
+			else
+				lat = mouseMoveY * 0.1 + onPointerDownLat;
+
+			if (CONFIG.direction.horizontal == "left")
+				lon = mouseMoveX * -0.1 + onPointerDownLon;
+			else
+				lon = mouseMoveX * 0.1 + onPointerDownLon;
 
 			// added
 			onCameraRotated_withMouse(lon, lat);

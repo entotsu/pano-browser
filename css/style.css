@@ -1,7 +1,9 @@
 body {
-	background-color: #000000;
+	/*background-color: #000000;*/
 	margin: 0px;
 	overflow: hidden;
+	/*dev*/
+	/*background: url("../images/textures/ricoh-theta-sample.jpg");*/
 }
 
 #info {
@@ -27,7 +29,7 @@ a {
 .popupMessage {
 	position: fixed;
 	top:40px;
-	left:40px;
+	right:40px;
 
 	border-radius: 20px;
 	background-color: rgba(0,0,0,0.5);

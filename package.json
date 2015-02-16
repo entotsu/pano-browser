@@ -10,6 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "~3.8.10",
-    "browser-sync": "~2.0.0-rc8"
+    "browser-sync": "~2.0.0-rc8",
+    "gulp-plumber": "~0.6.6",
+    "gulp-stylus": "~2.0.0",
+    "gulp-pleeease": "~1.1.0"
   }
 }

@@ -1,13 +1,13 @@
 
 function enableDragAndDropImage(onDropImageFile) {
 
+
 	function onDropFile(e) {
 		//デフォルトのイベントキャンセルしないとブラウザでイメージが表示されてしまう
 		cancelEvent(e);
 
 		//単一ファイルの想定
 		var file = e.dataTransfer.files[0];
-
 		if (!file.type.match('image.*')) {
 			alert('imageファイルにしてね');
 			cancelEvent(e);
@@ -15,6 +15,7 @@ function enableDragAndDropImage(onDropImageFile) {
 
 		onDropImageFile(file);
 	}
+
 
 	function cancelEvent(e) {
 		e.preventDefault();

@@ -96,16 +96,16 @@ function initPanoRender(onRotateCamera) {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		container.appendChild(renderer.domElement);
 
-		document.addEventListener('mousedown', onDocumentMouseDown, false);
-		document.addEventListener('mousemove', onDocumentMouseMove, false);
-		document.addEventListener('mouseup', onDocumentMouseUp, false);
+		container.addEventListener('mousedown', onMouseDown, false);
+		container.addEventListener('mousemove', onMouseMove, false);
+		container.addEventListener('mouseup', onMouseUp, false);
 
-		document.addEventListener('touchstart', onDocumentMouseDown, false);
-		document.addEventListener('touchmove', onDocumentMouseMove, false);
-		document.addEventListener('touchend', onDocumentMouseUp, false);
+		container.addEventListener('touchstart', onMouseDown, false);
+		container.addEventListener('touchmove', onMouseMove, false);
+		container.addEventListener('touchend', onMouseUp, false);
 
-		document.addEventListener('mousewheel', onDocumentMouseWheel, false);
-		document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+		container.addEventListener('mousewheel', onMouseWheel, false);
+		container.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
 		//
 
@@ -132,7 +132,7 @@ function initPanoRender(onRotateCamera) {
 
 
 
-	function onDocumentMouseDown(event) {
+	function onMouseDown(event) {
 
 		event.preventDefault();
 
@@ -146,7 +146,7 @@ function initPanoRender(onRotateCamera) {
 
 	}
 
-	function onDocumentMouseMove(event) {
+	function onMouseMove(event) {
 
 		if (isUserInteracting) {
 
@@ -158,13 +158,13 @@ function initPanoRender(onRotateCamera) {
 		}
 	}
 
-	function onDocumentMouseUp(event) {
+	function onMouseUp(event) {
 
 		isUserInteracting = false;
 
 	}
 
-	function onDocumentMouseWheel(event) {
+	function onMouseWheel(event) {
 
 		// WebKit
 

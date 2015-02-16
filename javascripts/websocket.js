@@ -1,16 +1,26 @@
 function initWebSocket(onRecieveFunction){
 
-    if (!onRecieveFunction) alert("please set 'onRecieveFunction' to getWebSocketSendFunction");
-
-    var socket;
-    // Defined at index.html
-    var uri = CONFIG.webSocket_URI;
- // var uri = "ws://localhost:8887";
-
-    var isSending = false;
     var SEND_FREQUENCY_MARGIN = 150;
 
+    var socket;
+    var isSending = false;
     var isConnected = false;
+
+
+    //--------------------------------------------------------------
+
+    if (!onRecieveFunction) alert("please set 'onRecieveFunction' to getWebSocketSendFunction");
+    if (!window.WebSocket) alert("FATAL: WebSocket not natively supported. This demo will not work!");
+
+    var $popup_connected = null;
+    var $popup_not_connected = null;
+    $(function() {
+        $popup_connected = $("#webSocketConnectedMessage");
+        $popup_not_connected = $("#webSocketErrorMessage");
+
+        connect();
+    });
+
 
 
     //--------------------------------------------------------------
@@ -33,47 +43,29 @@ function initWebSocket(onRecieveFunction){
         // onRecieveMessageViaWebSocket(text);
         onRecieveFunction(text);
     }
-    //--------------------------------------------------------------
-
-
-
-    if (!window.WebSocket) {
-        alert("FATAL: WebSocket not natively supported. This demo will not work!");
-    }
-
-    var $popup_connected = null;
-    var $popup_not_connected = null;
-
-    $(function() {
-        connect();
-        $popup_connected = $("#webSocketConnectedMessage");
-        $popup_not_connected = $("#webSocketErrorMessage");
-    });
-
 
     //--------------------------------------------------------------
 
 
     function connect() {
-        try {
-            socket = new WebSocket(uri);
-        } catch(e){
-            log(e);
-        }
+        console.log("connect...");
+        
+        socket = new WebSocket(window.CONFIG.webSocket_URI);
+
         socket.onopen = function() {
             log("[WebSocket#onopen]\n");
             popupConnectedMessage();
             isConnected = true;
         }
-        socket.onmessage = function(e) {
-            onRecieve(e.data);
-        }
         socket.onclose = function() {
             log("[WebSocket#onclose]\n");
-            socket = null;
             popupDisconnectedMessage();
+            socket = null;
             isConnected = false;
-            setTimeout(reconnect, 5000);
+            setTimeout(connect, 5000);
+        }
+        socket.onmessage = function(e) {
+            onRecieve(e.data);
         }
 
         // if (socket) return true;
@@ -87,30 +79,28 @@ function initWebSocket(onRecieveFunction){
         }
     }
 
-    var reconnectInterval = 5000;//ms
-    function reconnect() {
-        console.log("reconnect....");
-        connect();
-        // setTimeout(function(){
-        //     if (isConnected) $popup_not_connected.fadeOut("slow");
-        // }, 300);
-    }
+
+
+
+
+    //--------------------------------------------------------------
 
 
     function popupConnectedMessage () {
-        $popup_not_connected.fadeOut("slow");
         setTimeout(function(){
-            $popup_connected.fadeIn("slow",function(){
-            setTimeout(function(){$popup_connected.fadeOut("slow")},3000);
-        });
-        },1000);
+            $popup_not_connected.fadeOut("fast", function(){
+                $popup_connected.fadeIn("slow",function(){
+                    setTimeout(function(){
+                        $popup_connected.fadeOut("slow")
+                    },3000);
+                });                
+            });
+        },100);
     }
 
 
     function popupDisconnectedMessage () {
-        setTimeout(function(){
-            $popup_not_connected.fadeIn("slow");
-        },1000);
+        $popup_not_connected.fadeIn("slow");
     }
 
 
@@ -118,8 +108,14 @@ function initWebSocket(onRecieveFunction){
         console.log(text);
     }
 
+
+
+    //--------------------------------------------------------------
+
+
     var API = {};
     API.send = send;
+    API.connect = connect;
     return API;
 
 }

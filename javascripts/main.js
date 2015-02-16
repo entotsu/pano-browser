@@ -22,6 +22,7 @@
 		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
 		panoAPI = initPanoRender( onRotateCamera )//render.js
 		enableDragAndDropImage(onDropImageFile);//dropImage.js
+		initSettingView(onClickConnectButton);//ui.js
 	}
 
 
@@ -45,6 +46,10 @@
 		        var orientation = parseOrientationMessage(message);
 		        pitch = orientation.pitch;
 		        yaw = orientation.yaw;
+
+		        // TODO inverting is only here. ok???
+				if (CONFIG.direction.vertical == "negative") pitch *= -1;
+				if (CONFIG.direction.horizontal == "left") yaw *= -1;
 
 		        panoAPI.rotateCamera(yaw, pitch);
 		    }
@@ -82,6 +87,12 @@
 	// this function called from dropImage.js
 	function onDropImageFile (file) {
 		panoAPI.changePanoramicPhoto(file);
+	}
+
+	function onClickConnectButton(newUri) {
+		CONFIG.webSocket_URI = newUri;
+		websocketAPI.connect();
+
 	}
 	//================= ↑ MAIN FUNCTIONS ↑ ==================
 

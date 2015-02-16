@@ -4,9 +4,6 @@
 
 	window.onload = function() {
 		initPanoBrowser()
-
-		// SmartPhone Scroll Off
-		if (util.ua.isiOS || util.ua.isAndroid) $(window).on('touchmove.noScroll', function(e) {e.preventDefault();});
 	}
 
 
@@ -161,8 +158,6 @@
 		orientation.roll = roll;
 		orientation.pitch = pitch;
 		orientation.yaw = yaw;
-	    console.log(orientation);
-
 	    return orientation;
 	}
 

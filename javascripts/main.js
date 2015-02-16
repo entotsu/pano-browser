@@ -93,7 +93,7 @@
 
 	// this function called from dropImage.js
 	function onDropImageFile (file) {
-		panoAPI.changePanoramicPhoto(file);
+		panoAPI.changePanoramaByFile(file);
 	}
 
 	function onClickConnectButton(newUri) {

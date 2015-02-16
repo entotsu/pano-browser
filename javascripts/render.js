@@ -15,32 +15,61 @@ function initPanoRender(onRotateCamera) {
 		theta = 0;
 
 	init();
-	animate();
 
 
+	var enableVideoLoop = false;
+		
 	//---------------- added -------------------
 
 	var API = {};
 
 
-	API.changePanoramicPhoto = function(file) {
-		var img = document.createElement("img");
-		var fileReader = new FileReader();
-		fileReader.onload = function(e) {
-			img.src = e.target.result;
-			material.map = new THREE.Texture(img);
-			material.map.needsUpdate = true;
-		};
+	//by drag & drop
+	API.changePanoramaByFile = function(file) {
 
+		var fileReader = new FileReader();
+
+		var filetype = file.type.split('/')[0];
+
+
+		fileReader.onload = function(e) {
+			var url = e.target.result;
+
+			if (filetype == "video") {
+				API.changePanoramicVideoByURL(url);
+			}
+			else {
+				API.changePanoramicPhotoByURL(url);
+			}
+		};
 		fileReader.readAsDataURL(file);
 	};
 
 
 	API.changePanoramicPhotoByURL = function(url) {
+
+		// stop video loop
+		enableVideoLoop = false;
+
+		// change material
 		var img = document.createElement("img");
 		img.src = url;
 		material.map = new THREE.Texture(img);
 		material.map.needsUpdate = true;
+	};
+	API.changePanoramicVideoByURL = function(url) {
+	
+		getVideoTexture( url, function (videoTexture) {
+
+			// change material
+			material.map = videoTexture;
+			material.overdraw = true;
+			material.side = THREE.DoubleSide;
+			material.map.needsUpdate = true;
+
+			// start video
+			enableVideoLoop = true;
+		});
 	};
 
 
@@ -79,9 +108,13 @@ function initPanoRender(onRotateCamera) {
 
 	//------------------------------------------
 
+
+	var mesh;
+
+
 	function init() {
 
-		var container, mesh;
+		var container;
 
 		container = document.getElementById('container');
 
@@ -93,34 +126,111 @@ function initPanoRender(onRotateCamera) {
 		var geometry = new THREE.SphereGeometry(500, 60, 40);
 		geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
-		material = new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture(CONFIG.first_panoramicPhoto_URL)
+
+		// detect video or image
+		var isVideo = false;
+		var panorama_ext = CONFIG.first_panoramaURL.split('.').pop();
+		if (panorama_ext == "mp4" || panorama_ext == "MP4") isVideo = true;
+
+
+		// when video
+		if (isVideo) {
+			getVideoMaterial(CONFIG.first_panoramaURL, function (videoMaterial) {
+				material = videoMaterial;
+				onLoadMaterial();
+				enableVideoLoop = true;
+			});
+		}
+		// when image
+		else {
+			material = new THREE.MeshBasicMaterial({
+				map: THREE.ImageUtils.loadTexture(CONFIG.first_panoramaURL)
+			});
+			onLoadMaterial();
+		}
+
+
+		function onLoadMaterial() {
+
+			mesh = new THREE.Mesh(geometry, material);
+
+			scene.add(mesh);
+
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			container.appendChild(renderer.domElement);
+
+			container.addEventListener('mousedown', onMouseDown, false);
+			container.addEventListener('mousemove', onMouseMove, false);
+			container.addEventListener('mouseup', onMouseUp, false);
+			container.addEventListener('mousewheel', onMouseWheel, false);
+			container.addEventListener('DOMMouseScroll', onMouseWheel, false);
+
+			container.addEventListener('touchstart', onMouseDown, false);
+			container.addEventListener('touchmove', onMouseMove, false);
+			container.addEventListener('touchend', onMouseUp, false);
+
+			window.addEventListener('resize', onWindowResize, false);
+
+
+			animate();
+		}
+	}
+
+
+	var video, videoImageContext, videoTexture;
+	//loop updateの中で実行
+	function videoLoop(){
+		// console.log("videoLoop");
+		if (video.readyState === video.HAVE_ENOUGH_DATA) {
+		    videoImageContext.drawImage(video, 0, 0);
+		    if (videoTexture) {
+		        videoTexture.needsUpdate = true;
+		    }
+		}
+	}
+
+	function getVideoMaterial (videoURL, onLoadMaterial) {
+
+		getVideoTexture (videoURL, function(){
+
+			//生成したvideo textureをmapに指定し、overdrawをtureにしてマテリアルを生成
+			var movieMaterial = new THREE.MeshBasicMaterial({map: videoTexture, overdraw: true, side:THREE.DoubleSide});
+
+			onLoadMaterial(movieMaterial);
+
 		});
-
-		mesh = new THREE.Mesh(geometry, material);
-
-		scene.add(mesh);
-
-		renderer = new THREE.WebGLRenderer();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		container.appendChild(renderer.domElement);
-
-		container.addEventListener('mousedown', onMouseDown, false);
-		container.addEventListener('mousemove', onMouseMove, false);
-		container.addEventListener('mouseup', onMouseUp, false);
-		container.addEventListener('mousewheel', onMouseWheel, false);
-		container.addEventListener('DOMMouseScroll', onMouseWheel, false);
-
-		container.addEventListener('touchstart', onMouseDown, false);
-		container.addEventListener('touchmove', onMouseMove, false);
-		container.addEventListener('touchend', onMouseUp, false);
-
-		window.addEventListener('resize', onWindowResize, false);
 
 	}
 
 
+	function getVideoTexture(videoURL, onLoadTexture) {
+		//video要素とそれをキャプチャするcanvas要素を生成
+		video = document.createElement('video');
 
+		video.src = videoURL;
+		video.load();
+		video.play();
+		video.loop = true;
+
+		// メタデータ読み込み完了時に実行されるイベント
+		video.addEventListener("loadedmetadata",function (e){
+			videoImage = document.createElement('canvas');
+			videoImage.width = video.videoWidth;
+			videoImage.height = video.videoHeight;
+
+			videoImageContext = videoImage.getContext('2d');
+			videoImageContext.fillStyle = '#000000';
+			videoImageContext.fillRect(0, 0, videoImage.width, videoImage.height);
+
+			//生成したcanvasをtextureとしてTHREE.Textureオブジェクトを生成
+			videoTexture = new THREE.Texture(videoImage);
+			videoTexture.minFilter = THREE.LinearFilter;
+			videoTexture.magFilter = THREE.LinearFilter;
+
+			onLoadTexture(videoTexture);
+		});
+	}
 
 
 
@@ -229,6 +339,8 @@ function initPanoRender(onRotateCamera) {
 	}
 
 	function render() {
+
+		if (enableVideoLoop) videoLoop();
 
 		lat = Math.max(-85, Math.min(85, lat));
 		phi = THREE.Math.degToRad(90 - lat);

@@ -17,8 +17,6 @@ function initSettingView(onClickConnect) {
 		$settingButton.click(showSettingView);
 
 		initDirectionSettingView()
-
-		setTimeout(showSettingView, 100);
 	});
 
 

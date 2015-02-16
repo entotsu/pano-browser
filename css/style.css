@@ -1,26 +1,19 @@
 body {
-	/*background-color: #000000;*/
+	background-color: #000000;
 	margin: 0px;
 	overflow: hidden;
-	/*dev*/
-	/*background: url("../images/textures/ricoh-theta-sample.jpg");*/
 }
 
 #info {
-	position: absolute;
-	top: 0px; width: 100%;
+	position: fixed;
+	bottom: 12px;
+	text-align:center;
+	width: 100%;
 	color: #ffffff;
 	padding: 5px;
-	font-family:Monospace;
-	font-size:13px;
-	font-weight: bold;
-	text-align:center;
+	font-size:12px;
+	opacity: 0.3;
 }
-
-a {
-	color: #ffffff;
-}
-
 
 
 
@@ -28,38 +21,38 @@ a {
 
 .popupMessage {
 	position: fixed;
-	top:40px;
-	right:40px;
+	top:20px;
+	right:20px;
 
-	border-radius: 20px;
-	background-color: rgba(0,0,0,0.5);
-
-	padding: 10px;
+	border-radius: 5px;
+	padding: 0px;
 
 	color:  rgba(255,255,255,0.8);
+	opacity: 0.8;
 }
+.popupMessage img {
+	opacity: 0.8;
+	height:13px;
+	vertical-align: middle;
+	padding: 2px 8px 4px 4px;
+}
+.popupMessage p {
+	margin: 10px;
+	padding-right: 8px;
+	display: inline-block;
+	opacity: 0.8;
+}
+.popupMessage p span{
+	font-size: 10px;
+}
+
 
 #webSocketConnectedMessage {
 	background-color: rgba(0, 97, 19, 0.5);
 }
 #webSocketErrorMessage {
-	background-color: rgba(97, 0, 13, 0.5);
+	background-color: rgba(0, 0, 0, 0.2);
 }
 #webSocketErrorMessage,#webSocketConnectedMessage{
 	display: none;
-}
-
-
-.popupMessage p {
-	margin: 10px;
-	display: inline-block;
-}
-.popupMessage img {
-	opacity: 0.8;
-	height:45px;
-	vertical-align: middle;
-	padding: 0px 11px 8px 8px;
-}
-.popupMessage p span{
-	font-size: 20px;
 }

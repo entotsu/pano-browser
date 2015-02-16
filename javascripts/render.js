@@ -106,6 +106,8 @@ function initPanoRender(onRotateCamera) {
 
 		// stop video loop
 		enableVideoLoop = false;
+		video.pause();
+	    video.src = '';
 
 		// change material
 		var img = document.createElement("img");

@@ -36,6 +36,14 @@ function initPanoRender(onRotateCamera) {
 	};
 
 
+	API.changePanoramicPhotoByURL = function(url) {
+		var img = document.createElement("img");
+		img.src = url;
+		material.map = new THREE.Texture(img);
+		material.map.needsUpdate = true;
+	};
+
+
 	// the only Global function in this scope
 	API.rotateCamera = function(_lon, _lat) {
 		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);
@@ -100,15 +108,12 @@ function initPanoRender(onRotateCamera) {
 		container.addEventListener('mousedown', onMouseDown, false);
 		container.addEventListener('mousemove', onMouseMove, false);
 		container.addEventListener('mouseup', onMouseUp, false);
+		container.addEventListener('mousewheel', onMouseWheel, false);
+		container.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
 		container.addEventListener('touchstart', onMouseDown, false);
 		container.addEventListener('touchmove', onMouseMove, false);
 		container.addEventListener('touchend', onMouseUp, false);
-
-		container.addEventListener('mousewheel', onMouseWheel, false);
-		container.addEventListener('DOMMouseScroll', onMouseWheel, false);
-
-		//
 
 		window.addEventListener('resize', onWindowResize, false);
 
@@ -125,7 +130,6 @@ function initPanoRender(onRotateCamera) {
 		camera.updateProjectionMatrix();
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
-
 	}
 
 
@@ -139,6 +143,9 @@ function initPanoRender(onRotateCamera) {
 
 		isUserInteracting = true;
 
+		//スマホの場合
+		if (event.touches) var event = event.touches[0];
+
 		onPointerDownPointerX = event.clientX;
 		onPointerDownPointerY = event.clientY;
 
@@ -147,9 +154,15 @@ function initPanoRender(onRotateCamera) {
 
 	}
 
+
+
 	function onMouseMove(event) {
 
 		if (isUserInteracting) {
+
+
+			//スマホの場合
+			if (event.touches) var event = event.touches[0];
 
 			var mouseMoveY = (event.clientY - onPointerDownPointerY);
 			var mouseMoveX = (onPointerDownPointerX - event.clientX);
@@ -169,11 +182,13 @@ function initPanoRender(onRotateCamera) {
 		}
 	}
 
+
+
+
 	function onMouseUp(event) {
-
 		isUserInteracting = false;
-
 	}
+
 
 	function onMouseWheel(event) {
 

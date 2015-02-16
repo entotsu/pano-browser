@@ -3,25 +3,28 @@
 
 
 	window.onload = function() {
-		initPanoBrowser()
+		initPanoBrowser();
 	}
-
-
 
 
 
 	// ------------------ init pano-browser ------------------
 
 	var websocketAPI = null;
-	var panoAPI = null;
+	var rendererAPI = null;
+
 
 	function initPanoBrowser() {
-		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
-		panoAPI = initPanoRender( onRotateCamera )//render.js
-		enableDragAndDropImage(onDropImageFile);//dropImage.js
-		initSettingView(onClickConnectButton);//ui.js
-	}
 
+		websocketAPI = initWebSocket( onRecieveMessageViaWebSocket );//websocket.js
+
+		rendererAPI  = initPanoRender( onRotateCamera );//render.js
+
+		enableDragAndDropImage(onDropImageFile);//dropImage.js
+
+		initSettingView(onClickConnectButton);//ui.js
+
+	}
 
 
 
@@ -32,6 +35,8 @@
 	var yaw = 0;
 	var lastMessage;
 	var isGoingToRotate = false;
+
+
 	// When Browser recieved message from WebSocketServer of CVE-Client
 	// this function called from websocket.js
 	function onRecieveMessageViaWebSocket(message) {
@@ -57,6 +62,7 @@
 				var beforeEqual = message.substr(0, message.indexOf( "=" ));
 				if (beforeEqual == "o") {
 					var orientation = parseOrientationMessageFromPanoBrowser(message);
+					console.log(orientation);
 					pitch = orientation.phi;
 					yaw = orientation.theta;
 			        isGoingToRotate = true;
@@ -73,7 +79,7 @@
 				if (CONFIG.direction.vertical == "negative") rotatePitch *= -1;
 				if (CONFIG.direction.horizontal == "left") rotateYaw *= -1;
 
-		        panoAPI.rotateCamera(rotateYaw, rotatePitch);
+		        rendererAPI.rotateCamera(rotateYaw, rotatePitch);
 		    }
 		}
 	}
@@ -93,8 +99,9 @@
 
 	// this function called from dropImage.js
 	function onDropImageFile (file) {
-		panoAPI.changePanoramicPhoto(file);
+		rendererAPI.changePanoramaByFile(file);
 	}
+
 
 	function onClickConnectButton(newUri) {
 		CONFIG.webSocket_URI = newUri;
@@ -113,11 +120,12 @@
 
 
 
-	// ----------- message parser --------------------
+	// ------------------ message parser --------------------
 
 	function parseOrientationMessageFromPanoBrowser(message) {
-		// var message = "o=0," + phi + "," + theta;
+
 		var splited = message.split(",");
+
 		var phi = splited[1];
 		var theta = splited[2];
 
@@ -130,17 +138,10 @@
 	    };
 	}
 
-	function getPitchFromVolumeMessage(message) {
-        var volume = message.split(":")[1];
-        var pitch = (volume - 0.5) * 180; //  0~1 => -90~90
-        pitch = parseFloat(pitch);
-		return pitch;
-	}
-
 
 	function parseOrientationMessage(message) {
+
 	    var splited = message.split([":",","]);
-	    var orientation = {};
 
 	    var roll = splited[2];
 	    var pitch = splited[4];
@@ -150,20 +151,23 @@
         roll = parseFloat(roll);
         yaw = parseFloat(yaw);
 
-        //pitch -180 ~ 180 -> -90 ~ 90 へ
+        // -180 ~ 180   ->   -90 ~ 90
         if (pitch > 90) pitch = 90
         if (pitch < -90) pitch = -90
 
-	    var orientation = {};
-		orientation.roll = roll;
-		orientation.pitch = pitch;
-		orientation.yaw = yaw;
-	    return orientation;
+	    return {
+			roll  : roll,
+			pitch : pitch,
+			yaw   : yaw,
+	    };
 	}
 
 
-
-
-
+	function getPitchFromVolumeMessage(message) {
+        var volume = message.split(":")[1];
+        var pitch = (volume - 0.5) * 180; //  0~1 => -90~90
+        pitch = parseFloat(pitch);
+		return pitch;
+	}
 
 })();

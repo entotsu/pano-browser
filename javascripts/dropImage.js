@@ -9,8 +9,10 @@ function enableDragAndDropImage(onDropImageFile) {
 		//単一ファイルの想定
 		var file = e.dataTransfer.files[0];
 		if (!file.type.match('image.*')) {
-			alert('imageファイルにしてね');
-			cancelEvent(e);
+			if (!file.type.match('video.*')) {
+				alert('supported only image or video.');
+				cancelEvent(e);
+			}
 		}
 
 		onDropImageFile(file);

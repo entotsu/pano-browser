@@ -18,14 +18,12 @@
 	window.CONFIG = {};
 
 	CONFIG.enableWrappingDeg = true;
+	CONFIG.webSocket_URI     = "ws://localhost:8887";
+	CONFIG.first_panoramaURL = "./images/panorama/drive.mp4";
+	// CONFIG.first_panoramaURL = "./images/panorama/u_aizu.jpg";
 
-	CONFIG.webSocket_URI = "ws://localhost:8887";
-
-	// CONFIG.TEST_URL = "./images/textures/sample5.jpg";
-	CONFIG.first_panoramicPhoto_URL = "./images/textures/u_aizu.jpg";
-
-	CONFIG.direction = {}
-	CONFIG.direction.vertical = "positive";//or "negative"
+	CONFIG.direction         = {}
+	CONFIG.direction.vertical   = "positive";//or "negative"
 	CONFIG.direction.horizontal = "right";// or "left"
 </script>
 
@@ -78,7 +76,7 @@
 
 
 	<div id="info">
-		Drag & Drop equirectangular panoramic photo file.
+		Drag & Drop equirectangular panoramic photo or movie.
 	</div>
 
     <div class="popupMessage" id="webSocketErrorMessage">

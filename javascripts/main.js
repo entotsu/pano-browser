@@ -34,7 +34,7 @@
 	var pitch = 0;
 	var yaw = 0;
 	var lastMessage;
-
+	var isGoingToRotate = false;
 	// When Browser recieved message from WebSocketServer of CVE-Client
 	// this function called from websocket.js
 	function onRecieveMessageViaWebSocket(message) {
@@ -46,27 +46,34 @@
 		        var orientation = parseOrientationMessage(message);
 		        pitch = orientation.pitch;
 		        yaw = orientation.yaw;
-
-		        // TODO inverting is only here. ok???
-				if (CONFIG.direction.vertical == "negative") pitch *= -1;
-				if (CONFIG.direction.horizontal == "left") yaw *= -1;
-
-		        panoAPI.rotateCamera(yaw, pitch);
+		        isGoingToRotate = true;
 		    }
 
 		    //Volume (Extra case)
 		    else if (firstWord == "Volume") {
 		        pitch = getPitchFromVolumeMessage(message);
-
-		        panoAPI.rotateCamera(yaw, pitch);
+		        isGoingToRotate = true;
 		    }
 
 		    //when catch message from other pano-browser
 		    else {
 				var beforeEqual = message.substr(0, message.indexOf( "=" ));
 				if (beforeEqual == "o") {
-					//perce
+					var orientation = parseOrientationMessageFromPanoBrowser(message);
+					pitch = orientation.phi;
+					yaw = orientation.theta;
+			        isGoingToRotate = true;
 				}
+		    }
+
+
+		    if (isGoingToRotate) {
+		    	isGoingToRotate = false;
+		        // TODO inverting is only here. ok???
+				if (CONFIG.direction.vertical == "negative") pitch *= -1;
+				if (CONFIG.direction.horizontal == "left") yaw *= -1;
+
+		        panoAPI.rotateCamera(yaw, pitch);
 		    }
 		}
 	}
@@ -107,6 +114,21 @@
 
 
 	// ----------- message parser --------------------
+
+	function parseOrientationMessageFromPanoBrowser(message) {
+		// var message = "o=0," + phi + "," + theta;
+		var splited = message.split(",");
+		var phi = splited[1];
+		var theta = splited[2];
+
+		phi = parseFloat(phi);
+		theta = parseFloat(theta);
+
+	    return {
+	    	phi   : phi,
+	    	theta : theta
+	    };
+	}
 
 	function getPitchFromVolumeMessage(message) {
         var volume = message.split(":")[1];

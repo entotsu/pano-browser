@@ -52,7 +52,8 @@ function initPanoRender(onRotateCamera) {
 
 		if (CONFIG.enableWrappingDeg) {
 			fixed_lon %= 360;
-			if (fixed_lon <= 0) fixed_lon *= -1;
+			if (fixed_lon <= 0)
+				fixed_lon = 360 - fixed_lon * -1;
 		}
 
 		if (fixed_lat >  90) fixed_lat =  90;

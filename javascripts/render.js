@@ -58,8 +58,8 @@ function initPanoRender(onRotateCamera) {
 
 	// publish.  This object is returned by this function.
 	var API = {};
-	API.changePanoramaByFile      = changePanoramaByFile;
-	API.rotateCamera              = rotateCamera;
+	API.changePanoramaByFile = changePanoramaByFile;
+	API.rotateCamera         = rotateCamera;
 
 
 

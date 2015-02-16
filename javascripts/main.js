@@ -69,11 +69,14 @@
 
 		    if (isGoingToRotate) {
 		    	isGoingToRotate = false;
-		        // TODO inverting is only here. ok???
-				if (CONFIG.direction.vertical == "negative") pitch *= -1;
-				if (CONFIG.direction.horizontal == "left") yaw *= -1;
 
-		        panoAPI.rotateCamera(yaw, pitch);
+		        var rotateYaw = yaw;
+		        var rotatePitch = pitch;
+
+				if (CONFIG.direction.vertical == "negative") rotatePitch *= -1;
+				if (CONFIG.direction.horizontal == "left") rotateYaw *= -1;
+
+		        panoAPI.rotateCamera(rotateYaw, rotatePitch);
 		    }
 		}
 	}

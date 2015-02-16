@@ -14,74 +14,61 @@ function initPanoRender(onRotateCamera) {
 		phi = 0,
 		theta = 0;
 
+	var enableVideoLoop = false;
+		
+	var mesh;
+
+	var video, videoImageContext, videoTexture;
+
+
 	init();
 
 
-	var enableVideoLoop = false;
-		
-	//---------------- added -------------------
-
-	var API = {};
 
 
-	//by drag & drop
-	API.changePanoramaByFile = function(file) {
 
+
+	// -------------------- public API of render.js --------------------
+
+	// called by drag & drop
+	function changePanoramaByFile (file) {
 		var fileReader = new FileReader();
-
-		var filetype = file.type.split('/')[0];
-
 
 		fileReader.onload = function(e) {
 			var url = e.target.result;
-
+			var filetype = file.type.split('/')[0];
 			if (filetype == "video") {
-				API.changePanoramicVideoByURL(url);
+				changeVideoByURL(url);
 			}
 			else {
-				API.changePanoramicPhotoByURL(url);
+				changePhotoByURL(url);
 			}
 		};
+
 		fileReader.readAsDataURL(file);
 	};
 
 
-	API.changePanoramicPhotoByURL = function(url) {
-
-		// stop video loop
-		enableVideoLoop = false;
-
-		// change material
-		var img = document.createElement("img");
-		img.src = url;
-		material.map = new THREE.Texture(img);
-		material.map.needsUpdate = true;
-	};
-	API.changePanoramicVideoByURL = function(url) {
-	
-		getVideoTexture( url, function (videoTexture) {
-
-			// change material
-			material.map = videoTexture;
-			material.overdraw = true;
-			material.side = THREE.DoubleSide;
-			material.map.needsUpdate = true;
-
-			// start video
-			enableVideoLoop = true;
-		});
-	};
-
-
-	// the only Global function in this scope
-	API.rotateCamera = function(_lon, _lat) {
-		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);
-
+	// called when recieve message of oriantation
+	function rotateCamera (_lon, _lat) {
 		lon = _lon;
 		lat = _lat;
 	}
 
-	//マウスをつかって回転させたときに呼ばれる
+
+	// publish.  This object is returned by this function.
+	var API = {};
+	API.changePanoramaByFile      = changePanoramaByFile;
+	API.rotateCamera              = rotateCamera;
+
+
+
+
+
+
+
+	// --------- send to WebSocket in main.js --------
+
 	function onCameraRotated_withMouse(lon, lat) {
 
 		var fixed_lon = lon;
@@ -89,8 +76,9 @@ function initPanoRender(onRotateCamera) {
 
 		if (CONFIG.enableWrappingDeg) {
 			fixed_lon %= 360;
-			if (fixed_lon <= 0)
+			if (fixed_lon <= 0) {
 				fixed_lon = 360 - fixed_lon * -1;
+			}
 		}
 
 		if (fixed_lat >  90) fixed_lat =  90;
@@ -106,16 +94,58 @@ function initPanoRender(onRotateCamera) {
 	}
 
 
-	//------------------------------------------
 
 
-	var mesh;
 
+
+
+
+	// ----------- change panorama --------------
+
+	function changePhotoByURL (url) {
+
+		// stop video loop
+		enableVideoLoop = false;
+
+		// change material
+		var img = document.createElement("img");
+		img.src = url;
+		material.map = new THREE.Texture(img);
+		material.map.needsUpdate = true;
+	};
+
+
+	function changeVideoByURL(url) {
+	
+		loadVideoTexture( url, function (videoTexture) {
+
+			// change material
+			material.map = videoTexture;
+			material.overdraw = true;
+			material.side = THREE.DoubleSide;
+			material.map.needsUpdate = true;
+
+			// start video
+			enableVideoLoop = true;
+		});
+	};
+
+
+
+
+
+
+
+
+
+
+
+
+	//------------------- init -----------------------
 
 	function init() {
 
 		var container;
-
 		container = document.getElementById('container');
 
 		camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 1100);
@@ -125,7 +155,6 @@ function initPanoRender(onRotateCamera) {
 
 		var geometry = new THREE.SphereGeometry(500, 60, 40);
 		geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
-
 
 		// detect video or image
 		var isVideo = false;
@@ -178,8 +207,13 @@ function initPanoRender(onRotateCamera) {
 	}
 
 
-	var video, videoImageContext, videoTexture;
-	//loop updateの中で実行
+
+
+
+
+	// ------------------ video ----------------------------------
+
+	// called from update loop
 	function videoLoop(){
 		// console.log("videoLoop");
 		if (video.readyState === video.HAVE_ENOUGH_DATA) {
@@ -190,21 +224,20 @@ function initPanoRender(onRotateCamera) {
 		}
 	}
 
+
 	function getVideoMaterial (videoURL, onLoadMaterial) {
 
-		getVideoTexture (videoURL, function(){
-
+		loadVideoTexture (videoURL, function(){
 			//生成したvideo textureをmapに指定し、overdrawをtureにしてマテリアルを生成
 			var movieMaterial = new THREE.MeshBasicMaterial({map: videoTexture, overdraw: true, side:THREE.DoubleSide});
 
 			onLoadMaterial(movieMaterial);
-
 		});
 
 	}
 
 
-	function getVideoTexture(videoURL, onLoadTexture) {
+	function loadVideoTexture(videoURL, onLoadTexture) {
 		//video要素とそれをキャプチャするcanvas要素を生成
 		video = document.createElement('video');
 
@@ -234,6 +267,11 @@ function initPanoRender(onRotateCamera) {
 
 
 
+
+
+
+	// ----------------- EVENTS -------------------
+
 	function onWindowResize() {
 
 		camera.aspect = window.innerWidth / window.innerHeight;
@@ -241,10 +279,6 @@ function initPanoRender(onRotateCamera) {
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
-
-
-
-
 
 
 	function onMouseDown(event) {
@@ -261,17 +295,14 @@ function initPanoRender(onRotateCamera) {
 
 		onPointerDownLon = lon;
 		onPointerDownLat = lat;
-
 	}
-
 
 
 	function onMouseMove(event) {
 
 		if (isUserInteracting) {
 
-
-			//スマホの場合
+			// if smart phone
 			if (event.touches) var event = event.touches[0];
 
 			var mouseMoveY = (event.clientY - onPointerDownPointerY);
@@ -293,10 +324,10 @@ function initPanoRender(onRotateCamera) {
 	}
 
 
-
-
 	function onMouseUp(event) {
+
 		isUserInteracting = false;
+
 	}
 
 
@@ -330,13 +361,16 @@ function initPanoRender(onRotateCamera) {
 
 
 
+	// ------------ UPDATE LOOP -------------------
 
+	// LOOP called from init()
 	function animate() {
 
 		requestAnimationFrame(animate);
 		render();
 
 	}
+
 
 	function render() {
 
@@ -353,16 +387,20 @@ function initPanoRender(onRotateCamera) {
 		camera.lookAt(camera.target);
 
 		/*
-				// distortion
-				camera.position.x = - camera.target.x;
-				camera.position.y = - camera.target.y;
-				camera.position.z = - camera.target.z;
-				*/
+		// distortion
+		camera.position.x = - camera.target.x;
+		camera.position.y = - camera.target.y;
+		camera.position.z = - camera.target.z;
+		*/
 
 		renderer.render(scene, camera);
 	}
 
 
+
+
+
+	// --------- RETURN API OBJECT -----------
 
 	return API;
 }

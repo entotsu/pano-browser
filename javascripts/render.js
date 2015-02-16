@@ -36,6 +36,14 @@ function initPanoRender(onRotateCamera) {
 	};
 
 
+	API.changePanoramicPhotoByURL = function(url) {
+		var img = document.createElement("img");
+		img.src = url;
+		material.map = new THREE.Texture(img);
+		material.map.needsUpdate = true;
+	};
+
+
 	// the only Global function in this scope
 	API.rotateCamera = function(_lon, _lat) {
 		// console.log("rotateCamera  lon:" + _lon + " lat:" + _lat);

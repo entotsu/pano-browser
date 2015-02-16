@@ -156,10 +156,16 @@ function initPanoRender(onRotateCamera) {
 		var geometry = new THREE.SphereGeometry(500, 60, 40);
 		geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
+
 		// detect video or image
 		var isVideo = false;
-		var panorama_ext = CONFIG.first_panoramaURL.split('.').pop();
-		if (panorama_ext == "mp4" || panorama_ext == "MP4") isVideo = true;
+
+		var file_ext = CONFIG.first_panoramaURL.split('.').pop();
+
+		if (file_ext == "mp4" || file_ext == "MP4") {
+			isVideo = true;
+		}
+
 
 
 		// when video
@@ -215,7 +221,6 @@ function initPanoRender(onRotateCamera) {
 
 	// called from update loop
 	function videoLoop(){
-		// console.log("videoLoop");
 		if (video.readyState === video.HAVE_ENOUGH_DATA) {
 		    videoImageContext.drawImage(video, 0, 0);
 		    if (videoTexture) {

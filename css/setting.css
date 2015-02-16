@@ -23,7 +23,7 @@
   width: 25px;
 }
 #SheetBehindModal {
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.6);
   position: fixed;
   z-index: 100;
   top: 0px;
@@ -39,7 +39,7 @@
   left: -300px;
   transition-property: left;
   transition-duration: 0.3s;
-  background-color: rgba(51,177,255,0.9);
+  background-color: rgba(51,177,255,0.8);
   color: rgba(255,255,255,0.8);
   height: 100%;
   width: 250px;

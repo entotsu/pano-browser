@@ -104,10 +104,13 @@ function initPanoRender(onRotateCamera) {
 
 	function changePhotoByURL (url) {
 
-		// stop video loop
-		enableVideoLoop = false;
-		video.pause();
-	    video.src = '';
+
+		if (enableVideoLoop) {
+			// stop video loop
+			enableVideoLoop = false;
+			video.pause();
+		    video.src = '';			
+		}
 
 		// change material
 		var img = document.createElement("img");

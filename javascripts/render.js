@@ -104,7 +104,6 @@ function initPanoRender(onRotateCamera) {
 
 	function changePhotoByURL (url) {
 
-
 		if (enableVideoLoop) {
 			// stop video loop
 			enableVideoLoop = false;
@@ -112,11 +111,14 @@ function initPanoRender(onRotateCamera) {
 		    video.src = '';			
 		}
 
-		// change material
 		var img = document.createElement("img");
 		img.src = url;
-		material.map = new THREE.Texture(img);
-		material.map.needsUpdate = true;
+
+		// change material
+		setTimeout(function(){
+			material.map = new THREE.Texture(img);
+			material.map.needsUpdate = true;
+		},100);
 	};
 
 
@@ -318,15 +320,17 @@ function initPanoRender(onRotateCamera) {
 			var mouseMoveY = (event.clientY - onPointerDownPointerY);
 			var mouseMoveX = (onPointerDownPointerX - event.clientX);
 
+			var rotateSpeed = 0.3;
+
 			if (CONFIG.direction.vertical == "negative")
-				lat = mouseMoveY * -0.1 + onPointerDownLat;
+				lat = mouseMoveY * -rotateSpeed + onPointerDownLat;
 			else
-				lat = mouseMoveY * 0.1 + onPointerDownLat;
+				lat = mouseMoveY * rotateSpeed + onPointerDownLat;
 
 			if (CONFIG.direction.horizontal == "left")
-				lon = mouseMoveX * -0.1 + onPointerDownLon;
+				lon = mouseMoveX * -rotateSpeed + onPointerDownLon;
 			else
-				lon = mouseMoveX * 0.1 + onPointerDownLon;
+				lon = mouseMoveX * rotateSpeed + onPointerDownLon;
 
 			// added
 			onCameraRotated_withMouse(lon, lat);

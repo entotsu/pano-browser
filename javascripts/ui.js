@@ -1,7 +1,6 @@
 function initSettingView(onClickConnect) {
 
 	var $behindSheet;
-	var $settingButton;
 	var $settingArea;
 
 
@@ -10,11 +9,11 @@ function initSettingView(onClickConnect) {
 		$("#js_wsUri").val(CONFIG.webSocket_URI);
 
 		$behindSheet = $("#SheetBehindModal");
-		$settingButton = $("#settingButton");
 		$settingArea = $("#settingArea");
+		$photoSelectView = $("#photoSelectView");
 
-		$behindSheet.click(hideSettingView);
-		$settingButton.click(showSettingView);
+		$("#settingButton").click(showSettingView);
+		$("#photoButton").click(showPhotoSelectView);
 
 		initDirectionSettingView()
 	});
@@ -61,12 +60,21 @@ function initSettingView(onClickConnect) {
 	});
 
 
+	function showPhotoSelectView() {
+		$behindSheet.fadeIn(300);
+		$photoSelectView.addClass("show");
+		$behindSheet.click(hidePhotoSelectView);
+	}
+	function hidePhotoSelectView() {
+		$behindSheet.fadeOut(300);
+		$photoSelectView.removeClass("show");
+	}
 
 	function showSettingView() {
 		$behindSheet.fadeIn(300);
 		$settingArea.addClass("show");
+		$behindSheet.click(hideSettingView);
 	}
-
 	function hideSettingView() {
 		$behindSheet.fadeOut(300);
 		$settingArea.removeClass("show");

@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet" href="css/lib/reset.css">
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/setting.css">
+	<link rel="stylesheet" href="css/settingView.css">
+	<link rel="stylesheet" href="css/photoSelectView.css">
 </head>
 
 
@@ -22,8 +23,8 @@
 	CONFIG.enableWrappingDeg = true;
 	CONFIG.webSocket_URI     = "ws://localhost:8887";
 	// CONFIG.first_panoramaURL = "./images/panorama/drive.mp4";
-	// CONFIG.first_panoramaURL = "./images/panorama/u_aizu.jpg";
-	CONFIG.first_panoramaURL = "./images/panorama/tokyo.MP4";
+	CONFIG.first_panoramaURL = "./images/panorama/u_aizu.jpg";
+	// CONFIG.first_panoramaURL = "./images/panorama/tokyo.MP4";
 
 	CONFIG.direction = {}
 	CONFIG.direction.vertical   = "positive";//or "negative"
@@ -43,11 +44,25 @@
 
 
 
-	<a href="javascript:void(0);" id="settingButton"><img src="images/icons/settings.png"></a>
+	<a href="javascript:void(0);" id="settingButton" class="iconButton"><img src="images/icons/settings.png"></a>
 
+	<a href="javascript:void(0);" id="photoButton" class="iconButton"><img src="images/icons/photo.png"></a>
 
 
 	<div id="SheetBehindModal"></div>
+
+
+
+	<div id="photoSelectView">
+		<div>
+			<input type="file" id="fileInput" />
+		</div>
+		<div>
+			photo list
+		</div>
+	</div>
+
+
 
 
 	<div id="settingArea">
@@ -140,7 +155,7 @@
 <script src="./javascripts/util.js"></script>
 <script src="./javascripts/websocket.js"></script>
 <script src="./javascripts/render.js"></script>
-<script src="./javascripts/dropImage.js"></script>
+<script src="./javascripts/inputNewPanorama.js"></script>
 <script src="./javascripts/ui.js"></script>
 <script src="./javascripts/main.js"></script>
 

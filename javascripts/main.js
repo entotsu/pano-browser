@@ -20,10 +20,9 @@
 
 		rendererAPI  = initPanoRender( onRotateCamera );//render.js
 
-		enableDragAndDropImage(onDropImageFile);//dropImage.js
+		init_DropFile_and_LoadFile(onGetImageOrVideo);//dropImage.js
 
 		initSettingView(onClickConnectButton);//ui.js
-
 	}
 
 
@@ -98,7 +97,7 @@
 
 
 	// this function called from dropImage.js
-	function onDropImageFile (file) {
+	function onGetImageOrVideo (file) {
 		rendererAPI.changePanoramaByFile(file);
 	}
 

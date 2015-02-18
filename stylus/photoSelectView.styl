@@ -1,0 +1,28 @@
+
+
+
+#photoButton
+	bottom 20px
+	left 20px + 25 + (8*2) + (25/2)
+
+
+
+viewHeight = 200px
+
+#photoSelectView
+	position: fixed
+	bottom viewHeight * -1
+	left 0%
+	z-index 200
+
+	width 100%
+	height viewHeight
+	
+	background-color rgba(255, 255, 0, .8)
+	
+	transition-property bottom
+	transition-duration 0.3s
+	&.show
+		bottom 0px
+
+

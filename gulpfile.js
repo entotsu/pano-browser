@@ -27,6 +27,7 @@ gulp.task('stylus_task', function () {
 gulp.task("server_task", function() {
     browserSync({
         browser: 'Google Chrome Canary',
+        // browser: 'Firefox',
         server: {
             baseDir: "./"
         }
